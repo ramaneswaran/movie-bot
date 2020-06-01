@@ -13,3 +13,5 @@ models/mov_en_ner/vocab/key2row
 models/mov_en_ner/vocab/lexemes.bin
 models/mov_en_ner/vocab/strings.json
 models/mov_en_ner/vocab/vectors
+src/utils/__pycache__/
+src/utils/__pycache__/
