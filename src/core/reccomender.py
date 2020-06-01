@@ -1,4 +1,3 @@
-# The reccomender engine package
 class engine:
     '''
     Reccomendation engine of the bot
