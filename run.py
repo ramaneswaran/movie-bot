@@ -28,5 +28,5 @@ if __name__ == "__main__":
     engine = Engine(vectorizer, matrix, rev_map)
 
     # Load telegram bot
-    movie_bot = Telebot(bot_token)
+    movie_bot = Telebot(bot_token, api_token, engine)
     #movie_bot.activate()

@@ -5,10 +5,16 @@ from telegram.ext import MessageHandler, Filters
 
 
 class Telebot:
-    def __init__(self, token):
-        self.updater = Updater(token=token, use_context=True)
+    def __init__(self, bot_token, api_token, engine):
+
+        self.updater = Updater(token=bot_token, use_context=True)
         self.dispatcher = self.updater.dispatcher
-    
+
+        self.engine = engine
+        
+        self.api_token = api_token
+
+        
 
 
     def start(self, update, context):
