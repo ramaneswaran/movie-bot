@@ -20,11 +20,13 @@ if __name__ == "__main__":
 
     # Load reccomender model and vectorizer
     vectorizer = joblib.load('./models/vectorizer.pkl')
-    rev_map = joblib.load('./models/rev_map.pkl')
     matrix = joblib.load('./models/mov_matrix.pkl')
+    rev_map = joblib.load('./models/rev_map.pkl')
+       
 
     # Instantiate reccomender engine class
+    engine = Engine(vectorizer, matrix, rev_map)
 
     # Load telegram bot
     movie_bot = Telebot(bot_token)
-    movie_bot.activate()
+    #movie_bot.activate()
