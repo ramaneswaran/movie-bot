@@ -11,6 +11,9 @@ from src.core.reccomender import Engine
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
 
+# Import spacy
+import spacy
+
 if __name__ == "__main__":
     load_dotenv()
 
@@ -26,6 +29,9 @@ if __name__ == "__main__":
 
     # Instantiate reccomender engine class
     engine = Engine(vectorizer, matrix, rev_map)
+
+    # Load spacy model
+    nlp = spacy.load('./models/mov_en_ner')
 
     # Load telegram bot
     movie_bot = Telebot(bot_token, api_token, engine)
