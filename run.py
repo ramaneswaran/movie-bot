@@ -34,5 +34,5 @@ if __name__ == "__main__":
     nlp = spacy.load('./models/mov_en_ner')
 
     # Load telegram bot
-    movie_bot = Telebot(bot_token, api_token, engine)
+    movie_bot = Telebot(bot_token, api_token, engine, nlp)
     #movie_bot.activate()
