@@ -35,4 +35,4 @@ if __name__ == "__main__":
 
     # Load telegram bot
     movie_bot = Telebot(bot_token, api_token, engine, nlp)
-    #movie_bot.activate()
+    movie_bot.activate()
