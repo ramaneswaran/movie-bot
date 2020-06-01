@@ -4,7 +4,7 @@ from telegram.ext import MessageHandler, Filters
 
 
 
-class TeleBot:
+class Telebot:
     def __init__(self, token):
         self.updater = Updater(token=token, use_context=True)
         self.dispatcher = self.updater.dispatcher
@@ -27,6 +27,3 @@ class TeleBot:
     def activate(self):
         self.register_handlers()
         self.updater.start_polling()
-
-movie_bot = TeleBot(token)
-movie_bot.activate()

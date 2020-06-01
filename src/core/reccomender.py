@@ -1,4 +1,4 @@
-class engine:
+class Engine:
     '''
     Reccomendation engine of the bot
     '''
