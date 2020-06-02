@@ -149,11 +149,29 @@ class Telebot:
         '''
         pass
 
-    def get_more_info(self, chat_id, info, message_id):
+    def show_info(self, chat_id, info, message_id, context):
         '''
         This function shows more information
         '''
-        pass
+        try:
+            # Get requested info
+            info = self.user_state[chat_id]['movie']['info']
+
+            # Build menu
+            valid, button_list = menu_three()
+            if not valid:
+                raise Exception("Failed to get buttons")
+
+            valid, menu = build_menu(button_list, 1)
+            if not valid:
+                raise Exception("Failed to build menu")
+
+        except Exception as error:
+            print(error)
+
+        finally:
+            reply_markup = InlineKeyboardMarkup(menu)
+            context.bot.edit_message_text(chat_id=chat_id, message_id=message_id, text=info, reply_markup=reply_markup)
 
     def switch_menu(self, chat_id, message_id, menu_number, context):
         '''
