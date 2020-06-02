@@ -45,7 +45,7 @@ class Telebot:
 
         plot = ""
         try:
-            movie_title = self.get_movie_title(update.message.text)
+            movie_title = get_movie_title(update.message.text)
 
             if movie_title == -1:
                 raise Exception("Movie title could not be extracted")
@@ -58,7 +58,7 @@ class Telebot:
             
             movie_ids = self.engine.similar_movies(plot)
             
-            movie_gen = self.get_movie_gen(movie_ids)
+            movie_gen = get_movie_gen(movie_ids)
 
             while True:
                 try:
