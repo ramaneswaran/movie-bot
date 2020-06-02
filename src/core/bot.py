@@ -1,11 +1,13 @@
 from telegram.ext import Updater
 from telegram.ext import CommandHandler
 from telegram.ext import MessageHandler, Filters
+from telegram.ext import InlineKeyboardButton
+from telegram.ext import InlineKeyboardMarkup
 
 # Import utility functions for API
-from src.utils.api_utilities import get_meta_data, get_movie_detail, get_rating
-from src.utils.api_utilities import get_plot
-
+from src.utils.api_utils import get_meta_data, get_movie_detail, get_rating
+from src.utils.api_utils import get_plot
+from src.utils.bot_utils import build_menu, create_user_state
 
 class Telebot:
     def __init__(self, bot_token, api_token, engine, nlp):
@@ -38,7 +40,7 @@ class Telebot:
             pass
         else:
             # Create a new state
-            self.user_state[update.effective_chat.id] = self.create_user_state()
+            self.user_state[update.effective_chat.id] = create_user_state()
             
 
         plot = ""
@@ -80,33 +82,8 @@ class Telebot:
 
         
         context.bot.send_message(chat_id=update.effective_chat.id, text=plot)
-    
-    def create_user_state(self):
-        return {'request':False, 'cur_id':None, 'movie_gen':None}
 
-    def get_movie_title(self, text):
-        '''
-        This function extracts and returns movie name
-        '''
-        
-        doc = self.nlp(text)
 
-        movie_title = ""
-        try:
-            
-            movie_title = doc.ents[0].text
-
-        except Exception as error:
-            return -1
-
-        return movie_title
-
-    def get_movie_gen(self, movie_ids):
-        '''
-        This function returns a generator for movie IDs
-        '''
-        for imdb_id in movie_ids:
-            yield(imdb_id)
 
     def register_handlers(self):
         start_handler = CommandHandler('start', self.start)
