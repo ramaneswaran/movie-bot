@@ -16,9 +16,9 @@ def get_metadata(imdb_id, key):
         data = response.json()
         
         if data['Response'] == 'True':
-            return True, data['Title'], data['Runtime'], data['Poster']
+            return True, data
         else:
-            return False, None, None, None
+            return False, None
 
     except Exception as error:
         return False
