@@ -60,6 +60,8 @@ class Telebot:
         '''
         data = update.callback_query.data
         chat_id = update.callback_query.message.chat.id
+        message_id = update.callback_query.message.message_id
+
         print(data)
         print(chat_id)
         print(update.effective_chat.id)
@@ -116,20 +118,20 @@ class Telebot:
         
         context.bot.send_message(chat_id=update.effective_chat.id, text=plot)
 
-    def process_feedback(self, data, chat_id):
+    def process_feedback(self, data, chat_id, message_id):
         '''
         This function processes user feedback
         and calls another function to delegate work
         '''
         pass
 
-    def show_movie(self, chat_id):
+    def show_movie(self, chat_id, message_id):
         '''
         This function shows a movie
         '''
         pass
 
-    def get_more_info(self, chat_id, info):
+    def get_more_info(self, chat_id, info, message_id):
         '''
         This function shows more information
         '''
