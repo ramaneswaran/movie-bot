@@ -1,7 +1,7 @@
 # This module contains functions to facilitate calls to OMDB API
 import requests
 
-def get_meta_data(imdb_id, key):
+def get_metadata(imdb_id, key):
     '''
     This function returns metadata 
     Parameters:
@@ -16,9 +16,9 @@ def get_meta_data(imdb_id, key):
         data = response.json()
         
         if data['Response'] == 'True':
-            return True, data['Title']
+            return True, data['Title'], data['Runtime'], data['Poster']
         else:
-            return False, None
+            return False, None, None, None
 
     except Exception as error:
         return False
@@ -30,7 +30,7 @@ def get_movie_detail(imdb_id, detail, key):
     the detail keyword can be 
     
     'Title', 'Year', 'Rated', 'Released', 'Runtime', 'Genre', 'Director', 'Writer', 
-    'Actors', 'Plot', 'Language', 'Country', 'Awards', 'Poster', , 'Metascore', 
+    'Actors', 'Plot', 'Language', 'Country', 'Awards', 'Poster', 'Metascore', 
     'imdbRating', 'imdbVotes', 'imdbID'
     
     Parameters:

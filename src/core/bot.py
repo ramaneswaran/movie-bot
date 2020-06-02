@@ -63,7 +63,7 @@ class Telebot:
                     movie_id = next(movie_gen)
                     movie_id = str(movie_id)
                                       
-                    valid, title = get_meta_data(movie_id, self.api_token)
+                    valid, title = get_metadata(movie_id, self.api_token)
                     
                     if valid is False:
                         print("SHIT")
