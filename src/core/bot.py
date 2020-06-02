@@ -75,11 +75,12 @@ class Telebot:
             self.user_state[update.effective_chat.id] = create_user_state()
             
 
-        plot = ""
+        
         try:
-            movie_title = get_movie_title(update.message.text)
+            
+            valid, movie_title = get_movie_title(update.message.text)
 
-            if movie_title == -1:
+            if not valid:
                 raise Exception("Movie title could not be extracted")
 
             plot = get_plot(movie_title, self.api_token)

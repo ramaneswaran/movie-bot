@@ -15,13 +15,14 @@ def get_metadata(imdb_id, key):
         response = requests.get(url)
         data = response.json()
         
-        if data['Response'] == 'True':
-            return True, data
-        else:
+        if data['Response'] != 'True':
             return False, None
 
     except Exception as error:
-        return False
+        return False, None
+    
+    finally:
+        return True, data
     
 
 def get_movie_detail(imdb_id, detail, key):
@@ -43,16 +44,16 @@ def get_movie_detail(imdb_id, detail, key):
     try:
         url = 'http://www.omdbapi.com/?i=tt'+imdb_id+'&apikey='+key
         response = requests.get(url)
-        if response.status_code == 200:
-            data = response.json()
-            if detail not in data:
-                raise Exception("Invalid detail")
-            return data[detail]
-        else:
-            return -1
+        data = response.json()
+
+        if data['Response'] != 'True':
+            raise Exception("API call unsuccessfull")
+
     except Exception as error:
         print(error)
-        return -1
+        return False, None
+    finally:
+        return True, data[detail]
 
 def get_rating(imdb_id, key):
     '''
@@ -66,14 +67,15 @@ def get_rating(imdb_id, key):
     try:
         url = 'http://www.omdbapi.com/?i=tt'+imdb_id+'&apikey='+key
         response = requests.get(url)
-        if response.status_code == 200:
-            data = response.json()
-            return data['Ratings']
-        else:
-            return -1
+        data = response.json()
+
+        if data['Response'] != 'True':
+            raise Exception("API call unsuccessfull")
     except Exception as error:
         print(error)
-        return -1
+        return False, None
+    finally:
+        return True, data['Rating']
 
 def get_plot(title, key):
     '''
@@ -87,13 +89,14 @@ def get_plot(title, key):
     try:
         url = 'http://www.omdbapi.com/?t='+title+'&apikey='+key
         response = requests.get(url)
-        if response.status_code == 200:
-            data = response.json()
-            if 'Plot' not in data:
-                raise Exception("Invalid detail")
-            return data['Plot']
-        else:
-            return -1
+        data = response.json()
+
+        if data['Response'] != 'True':
+            raise Exception("API call unsuccessfull")
+    
     except Exception as error:
         print(error)
-        return -1
+        return False, None
+    
+    finally:
+        return True, data['Plot']
