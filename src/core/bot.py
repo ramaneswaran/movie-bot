@@ -118,31 +118,32 @@ class Telebot:
         '''
         
         if data == 'Yes':
-            print("Positive Feedback")
+            context.send_message(chat_id=chat_id, text='Glad that I could help you')
+
         elif data == 'No':
             self.show_movie(chat_id, context)
-            print("Negative Feedback")
+            
         elif data == 'More':
-            print("Info requested")
+            
             self.switch_menu(chat_id, message_id, 2, context)
         elif data == 'Director':
             self.show_info(chat_id, 'Director', message_id, context)
-            print("Director info requested")
+            
         elif data == 'Cast':
             self.show_info(chat_id, 'Actors', message_id, context)
-            print("Cast requested")
+            
         elif data == 'Plot':
             self.show_info(chat_id, 'Plot', message_id, context)
-            print("Plot requested")
+            
         elif data == 'Rating':
             self.show_rating(chat_id, message_id, context)
-            print("Rating requested")
+            
         elif data == 'Switch-1':
             self.switch_menu(chat_id, message_id, 1, context)
-            print("Switch to menu 1")
+            
         elif data == 'Switch-2':
             self.switch_menu(chat_id, message_id, 2, context)
-            print("Switch to menu 2")
+            
 
 
     def show_movie(self, chat_id, context):
