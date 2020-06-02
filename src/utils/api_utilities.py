@@ -13,13 +13,15 @@ def get_meta_data(imdb_id, key):
     try:
         url = 'http://www.omdbapi.com/?i=tt'+imdb_id+'&apikey='+key
         response = requests.get(url)
-        if response.status_code == 200:
-            data = response.json()
-            return data['Title'], data['Year'], data['Runtime'], data['Poster']
+        data = response.json()
+        
+        if data['Response'] == 'True':
+            return True, data['Title']
         else:
-            return -1
+            return False, None
+
     except Exception as error:
-        return -1
+        return False
     
 
 def get_movie_detail(imdb_id, detail, key):
