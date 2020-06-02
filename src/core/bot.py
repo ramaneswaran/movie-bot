@@ -100,7 +100,9 @@ class Telebot:
             # Get a movie generator
             movie_gen = get_movie_gen(movie_ids)
 
-
+            # Load the user state
+            self.user_state[context.effective_chat.id]['request'] = True
+            self.user_state[context.effective_chat.id]['gen'] = movie_gen
 
             # while True:
             #     try:

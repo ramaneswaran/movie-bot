@@ -68,7 +68,7 @@ def build_menu(buttons, n_cols, header_buttons=None, footer_buttons=None):
         return True, menu
 
 def create_user_state():
-    return {'request':False, 'movie':None, 'movie_gen':None}
+    return {'request':False, 'movie':None, 'gen':None}
 
 
 
