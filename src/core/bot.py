@@ -211,7 +211,7 @@ class Telebot:
         '''
         try:
             # Get requested info
-            info = self.user_state[chat_id]['movie'][info]
+            fetched_info = self.user_state[chat_id]['movie'][info]
 
             # Build menu
             valid, button_list = menu_three()
@@ -226,9 +226,11 @@ class Telebot:
             
             # Construct message
             message = "<b>"+info+"</b>\n\n"
-            message += info
+            message += fetched_info
 
-            context.bot.edit_message_text(chat_id=chat_id, message_id=message_id, text=info, reply_markup=reply_markup)
+            context.bot.edit_message_text(chat_id=chat_id, message_id=message_id, 
+                            text=message, reply_markup=reply_markup,
+                            parse_mode=telegram.ParseMode.HTML)
 
         except Exception as error:
             print(error)
@@ -245,6 +247,32 @@ class Telebot:
                     raise Exception("Failed to get buttons")
                 
                 valid, menu = build_menu(button_list, n_cols=2)
+
+                if not valid:
+                    raise Exception("Failed to build menu")
+
+                data = self.user_state[chat_id]['movie']
+
+                title = data['Title']
+                runtime = data['Runtime']
+                year = data['Year']
+                rated = data['Rated']
+                poster = data['Poster']
+
+                # Contruct the message
+                message = "<b>"+title+"</b> \n"
+                message += "\n"
+                message += "<b>Year   :</b> \t"+year+"\n"
+                message += "<b>Rated  :</b> \t"+rated+"\n"
+                message += "<b>Runtime:</b> \t"+runtime+"\n"
+
+
+            
+                reply_markup = InlineKeyboardMarkup(menu)
+                context.bot.edit_message_text(chat_id=chat_id, message_id=message_id, 
+                                reply_markup=reply_markup, text=message,
+                                parse_mode=telegram.ParseMode.HTML)
+
             
             elif menu_number == 2:
                 valid, button_list = menu_two()
@@ -252,21 +280,16 @@ class Telebot:
                     raise Exception("Failed to get buttons")
                 
                 valid, menu = build_menu(button_list, n_cols=2)
-            
-            elif menu_number == 3:
-                valid, button_list = menu_three()
-                if not valid:
-                    raise Exception("Failed to get buttons")
 
-                valid, menu = build_menu(button_list, n_cols=1)
+                if not valid:
+                    raise Exception("Failed to build menu")
+
+                reply_markup = InlineKeyboardMarkup(menu)
+                context.bot.edit_message_text(chat_id=chat_id, message_id=message_id, reply_markup=reply_markup, text="What do you want to know?")
+
         
         except Exception as error:
             print(error)
-        
-        finally:
-            
-            reply_markup = InlineKeyboardMarkup(menu)
-            context.bot.edit_message_text(chat_id=chat_id, message_id=message_id, reply_markup=reply_markup, text='SHIT')
     
     def error(self, update, context):
         '''
