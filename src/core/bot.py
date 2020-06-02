@@ -126,15 +126,21 @@ class Telebot:
             print("Info requested")
             self.switch_menu(chat_id, message_id, 2, context)
         elif data == 'Director':
+            self.show_info(chat_id, 'Director', message_id, context)
             print("Director info requested")
         elif data == 'Cast':
+            self.show_info(chat_id, 'Actors', message_id, context)
             print("Cast requested")
         elif data == 'Plot':
+            self.show_info(chat_id, 'Plot', message_id, context)
             print("Plot requested")
+        elif data == 'Rating':
+            print("Rating requested")
         elif data == 'Switch-1':
             self.switch_menu(chat_id, message_id, 1, context)
             print("Switch to menu 1")
         elif data == 'Switch-2':
+            self.switch_menu(chat_id, message_id, 2, context)
             print("Switch to menu 2")
 
 
@@ -205,7 +211,7 @@ class Telebot:
         '''
         try:
             # Get requested info
-            info = self.user_state[chat_id]['movie']['info']
+            info = self.user_state[chat_id]['movie'][info]
 
             # Build menu
             valid, button_list = menu_three()
@@ -215,14 +221,19 @@ class Telebot:
             valid, menu = build_menu(button_list, 1)
             if not valid:
                 raise Exception("Failed to build menu")
+            
+            reply_markup = InlineKeyboardMarkup(menu)
+            
+            # Construct message
+            message = "<b>"+info+"</b>\n\n"
+            message += info
+
+            context.bot.edit_message_text(chat_id=chat_id, message_id=message_id, text=info, reply_markup=reply_markup)
 
         except Exception as error:
             print(error)
 
-        finally:
-            reply_markup = InlineKeyboardMarkup(menu)
-            context.bot.edit_message_text(chat_id=chat_id, message_id=message_id, text=info, reply_markup=reply_markup)
-
+            
     def switch_menu(self, chat_id, message_id, menu_number, context):
         '''
         This function switches menu
