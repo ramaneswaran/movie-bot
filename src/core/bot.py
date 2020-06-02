@@ -103,23 +103,6 @@ class Telebot:
             self.user_state[update.effective_chat.id]['request'] = True
             self.user_state[update.effective_chat.id]['gen'] = movie_gen
 
-            # while True:
-            #     try:
-            #         movie_id = next(movie_gen)
-            #         movie_id = str(movie_id)
-                                      
-            #         valid, data = get_metadata(movie_id, self.api_token)
-                    
-            #         if valid is False:
-            #             print("SHIT")
-            #             print(movie_id)
-            #         else:
-            #             title = data['Title']
-            #             context.bot.send_message(chat_id=update.effective_chat.id, text=title)
-                
-            #     except StopIteration:
-            #         break
-
             
         except Exception as error:
             print("Error occured")
@@ -187,9 +170,9 @@ class Telebot:
             # Contruct the message
             message = "<b>"+title+"</b> \n"
             message += "\n"
-            message += "<b>Year:</b> "+year+"\n"
-            message += "<b>Rated</b>: "+rated+"\n"
-            message += "<b>Runtime:</b> "+runtime+"\n"
+            message += "<b>Year:</b> \t"+year+"\n"
+            message += "<b>Rated</b>: \t"+rated+"\n"
+            message += "<b>Runtime:</b> \t"+runtime+"\n"
             
             # Contruct menu
             valid, button_list = menu_one()
