@@ -72,7 +72,7 @@ def create_user_state():
 
 
 
-def get_movie_gen(self, movie_ids):
+def get_movie_gen(movie_ids):
     '''
     This function returns a generator for movie IDs
     '''

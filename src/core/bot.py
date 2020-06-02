@@ -88,16 +88,17 @@ class Telebot:
 
             print("Movie title is : "+movie_title)
 
-            # valid, plot = get_plot(movie_title, self.api_token)
+            valid, plot = get_plot(movie_title, self.api_token)
             
-            # if not valid:
-            #     raise Exception("Movie not found in OMDB")
-            # print("Movie plot is :"+plot)
-            # # Get similar movies
-            # movie_ids = self.engine.similar_movies(plot)
-            
-            # # Get a movie generator
-            # movie_gen = get_movie_gen(movie_ids)
+            if not valid:
+                raise Exception("Movie not found in OMDB")
+            print("Movie plot is :"+plot)
+
+            # Get similar movies
+            movie_ids = self.engine.similar_movies(plot)
+            print(movie_ids)
+            # Get a movie generator
+            movie_gen = get_movie_gen(movie_ids)
 
 
 
