@@ -10,7 +10,7 @@ from telegram import InlineKeyboardMarkup
 from src.utils.api_utils import get_metadata, get_movie_detail, get_rating
 from src.utils.api_utils import get_plot
 from src.utils.bot_utils import build_menu, create_user_state
-from src.utils.bot_utils import button_list_generator, info_buttons
+from src.utils.bot_utils import menu_one, menu_two, menu_three
 
 class Telebot:
     def __init__(self, bot_token, api_token, engine, nlp):
@@ -40,7 +40,7 @@ class Telebot:
     def start(self, update, context):
         
         try:
-            valid, button_list = button_list_generator()
+            valid, button_list = menu_one()
             if valid:
                 valid, menu = build_menu(button_list, n_cols=2)
             else:
@@ -62,9 +62,7 @@ class Telebot:
         chat_id = update.callback_query.message.chat.id
         message_id = update.callback_query.message.message_id
 
-        print(data)
-        print(chat_id)
-        print(update.effective_chat.id)
+        self.process_feedback(data, chat_id, message_id, context)
 
     def echo(self, update, context):
         
@@ -119,12 +117,31 @@ class Telebot:
         
         context.bot.send_message(chat_id=update.effective_chat.id, text=plot)
 
-    def process_feedback(self, data, chat_id, message_id):
+    def process_feedback(self, data, chat_id, message_id, context):
         '''
         This function processes user feedback
         and calls another function to delegate work
         '''
-        pass
+        
+        if data == 'Yes':
+            print("Positive Feedback")
+        elif data == 'No':
+            print("Negative Feedback")
+        elif data == 'More':
+            print("Info requested")
+            self.switch_menu(chat_id, message_id, 2, context)
+        elif data == 'Director':
+            print("Director info requested")
+        elif data == 'Cast':
+            print("Cast requested")
+        elif data == 'Plot':
+            print("Plot requested")
+        elif data == 'Switch-1':
+            self.switch_menu(chat_id, message_id, 1, context)
+            print("Switch to menu 1")
+        elif data == 'Switch-2':
+            print("Switch to menu 2")
+
 
     def show_movie(self, chat_id, message_id):
         '''
@@ -138,11 +155,39 @@ class Telebot:
         '''
         pass
 
-    def switch_menu(self, chat_id, info, message_id):
+    def switch_menu(self, chat_id, message_id, menu_number, context):
         '''
         This function switches menu
         '''
-        pass
+        try:
+            if menu_number == 1:
+                valid, button_list = menu_one()
+                if not valid:
+                    raise Exception("Failed to get buttons")
+                
+                valid, menu = build_menu(button_list, n_cols=2)
+            
+            elif menu_number == 2:
+                valid, button_list = menu_two()
+                if not valid:
+                    raise Exception("Failed to get buttons")
+                
+                valid, menu = build_menu(button_list, n_cols=2)
+            
+            elif menu_number == 3:
+                valid, button_list = menu_three()
+                if not valid:
+                    raise Exception("Failed to get buttons")
+
+                valid, menu = build_menu(button_list, n_cols=1)
+        
+        except Exception as error:
+            print(error)
+        
+        finally:
+            
+            reply_markup = InlineKeyboardMarkup(menu)
+            context.bot.edit_message_text(chat_id=chat_id, message_id=message_id, reply_markup=reply_markup, text='SHIT')
     
     def error(self, update, context):
         '''

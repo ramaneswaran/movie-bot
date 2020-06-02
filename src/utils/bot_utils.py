@@ -25,8 +25,8 @@ def menu_two():
             InlineKeyboardButton("Rating", callback_data="Rating"),
             InlineKeyboardButton("Cast", callback_data="Cast"),
             InlineKeyboardButton("Director", callback_data="Director"),
-            InlineKeyboardButton("Plot", callback_data="Plot")
-            InlineKeyboardButton("Go Back", callback_data="Switch-1")
+            InlineKeyboardButton("Plot", callback_data="Plot"),
+            InlineKeyboardButton("Go Back", callback_data="Switch-1"),
         ]
     except Exception as error:
         return False, None
