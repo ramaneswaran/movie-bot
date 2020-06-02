@@ -10,6 +10,7 @@ from telegram import InlineKeyboardMarkup
 from src.utils.api_utils import get_metadata, get_movie_detail, get_rating
 from src.utils.api_utils import get_plot
 from src.utils.bot_utils import build_menu, create_user_state
+from src.utils.bot_utils import button_list_generator, info_buttons
 
 class Telebot:
     def __init__(self, bot_token, api_token, engine, nlp):
@@ -39,7 +40,7 @@ class Telebot:
     def start(self, update, context):
         
         try:
-            valid, button_list = self.button_list_generator()
+            valid, button_list = button_list_generator()
             if valid:
                 valid, menu = build_menu(button_list, n_cols=2)
             else:
@@ -57,8 +58,11 @@ class Telebot:
         '''
         This function handles callbacks from buttons
         '''
-        query = update.callback_query
-        print(query)
+        data = update.callback_query.data
+        chat_id = update.callback_query.message.chat.id
+        print(data)
+        print(chat_id)
+        print(update.effective_chat.id)
 
     def echo(self, update, context):
         
@@ -112,42 +116,32 @@ class Telebot:
         
         context.bot.send_message(chat_id=update.effective_chat.id, text=plot)
 
+    def process_feedback(self, data, chat_id):
+        '''
+        This function processes user feedback
+        and calls another function to delegate work
+        '''
+        pass
+
+    def show_movie(self, chat_id):
+        '''
+        This function shows a movie
+        '''
+        pass
+
+    def get_more_info(self, chat_id, info):
+        '''
+        This function shows more information
+        '''
+        pass
+
+    
     def error(self, update, context):
         '''
         This function logs errors caused by updates
         '''
         self.logger.warning('Update "%s" caused error "%s"', update, context.error)
 
-    def button_list_generator(self):
-        '''
-        This function generates button list
-        '''
-        try:
-            button_list = [
-                InlineKeyboardButton("I'll watch this", callback_data="Yes"),
-                InlineKeyboardButton("Show me another", callback_data="No"),
-                InlineKeyboardButton("Show me more information", callback_data="More"),                
-            ]
-        except Exception as error:
-            return False, None
-        finally:
-            return True, button_list
-    
-    def info_buttons(self):
-        '''
-        This function generates buttons for extra info menu
-        '''
-        try:
-            button_list = [
-                InlineKeyboardButton("Rating", callback_data="Rating"),
-                InlineKeyboardButton("Cast", callback_data="Cast"),
-                InlineKeyboardButton("Director", callback_data="Director"),
-                InlineKeyboardButton("Plot", callback_data="Plot")                
-            ]
-        except Exception as error:
-            return False, None
-        finally:
-            return True, button_list
 
     def register_handlers(self):
         start_handler = CommandHandler('start', self.start)
