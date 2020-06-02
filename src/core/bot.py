@@ -137,6 +137,11 @@ class Telebot:
         '''
         pass
 
+    def switch_menu(self, chat_id, info, message_id):
+        '''
+        This function switches menu
+        '''
+        pass
     
     def error(self, update, context):
         '''

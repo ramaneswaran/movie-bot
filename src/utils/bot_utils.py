@@ -1,7 +1,7 @@
 from telegram import InlineKeyboardButton
 from telegram import InlineKeyboardMarkup
 
-def button_list_generator():
+def menu_one():
     '''
     This function generates button list
     '''
@@ -16,7 +16,7 @@ def button_list_generator():
     finally:
         return True, button_list
 
-def info_buttons():
+def menu_two():
     '''
     This function generates buttons for extra info menu
     '''
@@ -25,12 +25,27 @@ def info_buttons():
             InlineKeyboardButton("Rating", callback_data="Rating"),
             InlineKeyboardButton("Cast", callback_data="Cast"),
             InlineKeyboardButton("Director", callback_data="Director"),
-            InlineKeyboardButton("Plot", callback_data="Plot")                
+            InlineKeyboardButton("Plot", callback_data="Plot")
+            InlineKeyboardButton("Go Back", callback_data="Switch-1")
         ]
     except Exception as error:
         return False, None
     finally:
         return True, button_list
+
+def menu_three():
+    '''
+    This function generates buttons last menu
+    '''
+    try:
+        button_list = [
+            InlineKeyboardButton("Go Back", callback_data="Switch-2"),              
+        ]
+    except Exception as error:
+        return False, None
+    finally:
+        return True, button_list
+
 
 def build_menu(buttons, n_cols, header_buttons=None, footer_buttons=None):
     '''
