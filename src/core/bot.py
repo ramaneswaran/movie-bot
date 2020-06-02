@@ -1,6 +1,7 @@
 import logging
 from telegram.ext import Updater
 from telegram.ext import CommandHandler
+from telegram.ext import CallbackQueryHandler
 from telegram.ext import MessageHandler, Filters
 from telegram import InlineKeyboardButton
 from telegram import InlineKeyboardMarkup
@@ -51,6 +52,13 @@ class Telebot:
                 
         except Exception as error:
             print(error)
+
+    def button(self, update, context):
+        '''
+        This function handles callbacks from buttons
+        '''
+        query = update.callback_query
+        print(query)
 
     def echo(self, update, context):
         
@@ -104,7 +112,7 @@ class Telebot:
         
         context.bot.send_message(chat_id=update.effective_chat.id, text=plot)
 
-    def error(update, context):
+    def error(self, update, context):
         '''
         This function logs errors caused by updates
         '''
@@ -124,13 +132,32 @@ class Telebot:
             return False, None
         finally:
             return True, button_list
-            s
+    
+    def info_buttons(self):
+        '''
+        This function generates buttons for extra info menu
+        '''
+        try:
+            button_list = [
+                InlineKeyboardButton("Rating", callback_data="Rating"),
+                InlineKeyboardButton("Cast", callback_data="Cast"),
+                InlineKeyboardButton("Director", callback_data="Director"),
+                InlineKeyboardButton("Plot", callback_data="Plot")                
+            ]
+        except Exception as error:
+            return False, None
+        finally:
+            return True, button_list
+
     def register_handlers(self):
         start_handler = CommandHandler('start', self.start)
         echo_handler = MessageHandler(Filters.text, self.echo)
+        button_handler = CallbackQueryHandler(self.button)
         
         self.dispatcher.add_handler(start_handler)
         self.dispatcher.add_handler(echo_handler)
+        self.dispatcher.add_handler(button_handler)
+        self.dispatcher.add_error_handler(self.error)
 
     def activate(self):
         self.register_handlers()
