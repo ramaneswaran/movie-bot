@@ -135,6 +135,7 @@ class Telebot:
             self.show_info(chat_id, 'Plot', message_id, context)
             print("Plot requested")
         elif data == 'Rating':
+            self.show_rating(chat_id, message_id, context)
             print("Rating requested")
         elif data == 'Switch-1':
             self.switch_menu(chat_id, message_id, 1, context)
@@ -235,7 +236,41 @@ class Telebot:
         except Exception as error:
             print(error)
 
+    def show_rating(self, chat_id, message_id, context):
+        '''
+        This function shows ratings
+        '''
+        try:
+            # Build menu
+            valid, button_list = menu_three()
+            if not valid:
+                raise Exception("Failed to get buttons")
+
+            valid, menu = build_menu(button_list, 1)
+            if not valid:
+                raise Exception("Failed to build menu")
             
+            reply_markup = InlineKeyboardMarkup(menu)
+            
+            # Unpack data
+            data = self.user_state[chat_id]['movie']
+            
+            # Get ratings
+            meta = data['Metascore']
+            imdb = data['imdbRating']
+
+            # Contruct message
+            message = "<b>Rating</b>\n\n"
+            message += "<b>Metascore:</b>\t"+meta+"\n"
+            message += "<b>IMDB:</b>\t"+imdb+"\n"
+
+            context.bot.edit_message_text(chat_id=chat_id, message_id=message_id, 
+                text=message, reply_markup=reply_markup,
+                parse_mode=telegram.ParseMode.HTML) 
+
+        except Exception as error:
+            print(error)
+
     def switch_menu(self, chat_id, message_id, menu_number, context):
         '''
         This function switches menu
