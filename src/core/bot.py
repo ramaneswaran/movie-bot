@@ -1,4 +1,5 @@
 import logging
+import telegram
 from telegram.ext import Updater
 from telegram.ext import CommandHandler
 from telegram.ext import CallbackQueryHandler
@@ -75,9 +76,7 @@ class Telebot:
         else:
             # Create a new state
             self.user_state[update.effective_chat.id] = create_user_state()
-            
-
-        
+       
         try:
             
             doc = self.nlp(update.message.text)
@@ -101,8 +100,8 @@ class Telebot:
             movie_gen = get_movie_gen(movie_ids)
 
             # Load the user state
-            self.user_state[context.effective_chat.id]['request'] = True
-            self.user_state[context.effective_chat.id]['gen'] = movie_gen
+            self.user_state[update.effective_chat.id]['request'] = True
+            self.user_state[update.effective_chat.id]['gen'] = movie_gen
 
             # while True:
             #     try:
@@ -126,8 +125,8 @@ class Telebot:
             print("Error occured")
             print(error)
 
-        
-        context.bot.send_message(chat_id=update.effective_chat.id, text="SOME")
+        finally:
+            self.show_movie(update.effective_chat.id, context)
 
     def process_feedback(self, data, chat_id, message_id, context):
         '''
@@ -138,6 +137,7 @@ class Telebot:
         if data == 'Yes':
             print("Positive Feedback")
         elif data == 'No':
+            self.show_movie(chat_id, context)
             print("Negative Feedback")
         elif data == 'More':
             print("Info requested")
@@ -155,11 +155,66 @@ class Telebot:
             print("Switch to menu 2")
 
 
-    def show_movie(self, chat_id, message_id):
+    def show_movie(self, chat_id, context):
         '''
         This function shows a movie
         '''
-        pass
+        try:
+            # Check if user has requested movie
+            if self.user_state[chat_id]['request'] is False:
+                raise Exception("No movie request made")
+            
+            # Get the generator
+            movie_gen = self.user_state[chat_id]['gen']
+
+            # Load a movie to user state
+            movie_id = next(movie_gen)
+            movie_id = str(movie_id)
+
+            valid, data = get_metadata(movie_id, self.api_token)
+
+            if not valid:
+                raise Exception("API call failed")
+
+            self.user_state[chat_id]['movie'] = data
+
+            title = data['Title']
+            runtime = data['Runtime']
+            year = data['Year']
+            rated = data['Rated']
+            poster = data['Poster']
+
+            # Contruct the message
+            message = "<b>"+title+"</b> \n"
+            message += "\n"
+            message += "<b>Year:</b> "+year+"\n"
+            message += "<b>Rated</b>: "+rated+"\n"
+            message += "<b>Runtime:</b> "+runtime+"\n"
+            
+            # Contruct menu
+            valid, button_list = menu_one()
+            if not valid:
+                print("Failed to get buttons")
+            
+            valid, menu = build_menu(button_list, 2)
+            if not valid:
+                print("Failed to build menu")
+
+            reply_markup = InlineKeyboardMarkup(menu)
+
+            # Send message
+            context.bot.send_photo(chat_id=chat_id, photo=poster)
+            context.bot.send_message(chat_id=chat_id, text=message, 
+                                    parse_mode=telegram.ParseMode.HTML,
+                                    reply_markup=reply_markup)
+
+        except StopIteration:
+            context.bot.send_message(chat_id=chat_id, text="That's all folks")
+
+        except Exception as error:
+            print(error)
+
+
 
     def show_info(self, chat_id, info, message_id, context):
         '''
