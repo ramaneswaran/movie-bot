@@ -11,6 +11,8 @@ from src.utils.api_utils import get_metadata, get_movie_detail, get_rating
 from src.utils.api_utils import get_plot
 from src.utils.bot_utils import build_menu, create_user_state
 from src.utils.bot_utils import menu_one, menu_two, menu_three
+from src.utils.bot_utils import get_movie_title
+from src.utils.bot_utils import get_movie_gen
 
 class Telebot:
     def __init__(self, bot_token, api_token, engine, nlp):
@@ -67,7 +69,7 @@ class Telebot:
     def echo(self, update, context):
         
         # Check if user state is registered
-        if udpate.effective_chat.id in self.user_state:
+        if update.effective_chat.id in self.user_state:
             # Load his state
             pass
         else:
@@ -78,37 +80,43 @@ class Telebot:
         
         try:
             
-            valid, movie_title = get_movie_title(update.message.text)
+            doc = self.nlp(update.message.text)
+            valid, movie_title = get_movie_title(doc)
 
             if not valid:
                 raise Exception("Movie title could not be extracted")
 
-            plot = get_plot(movie_title, self.api_token)
+            print("Movie title is : "+movie_title)
 
-            if plot == -1:
-                raise Exception("Movie not found in OMDB")
+            # valid, plot = get_plot(movie_title, self.api_token)
             
+            # if not valid:
+            #     raise Exception("Movie not found in OMDB")
+            # print("Movie plot is :"+plot)
+            # # Get similar movies
+            # movie_ids = self.engine.similar_movies(plot)
             
-            movie_ids = self.engine.similar_movies(plot)
-            
-            movie_gen = get_movie_gen(movie_ids)
+            # # Get a movie generator
+            # movie_gen = get_movie_gen(movie_ids)
 
-            while True:
-                try:
-                    movie_id = next(movie_gen)
-                    movie_id = str(movie_id)
+
+
+            # while True:
+            #     try:
+            #         movie_id = next(movie_gen)
+            #         movie_id = str(movie_id)
                                       
-                    valid, data = get_metadata(movie_id, self.api_token)
+            #         valid, data = get_metadata(movie_id, self.api_token)
                     
-                    if valid is False:
-                        print("SHIT")
-                        print(movie_id)
-                    else:
-                        title = data['Title']
-                        context.bot.send_message(chat_id=update.effective_chat.id, text=title)
+            #         if valid is False:
+            #             print("SHIT")
+            #             print(movie_id)
+            #         else:
+            #             title = data['Title']
+            #             context.bot.send_message(chat_id=update.effective_chat.id, text=title)
                 
-                except StopIteration:
-                    break
+            #     except StopIteration:
+            #         break
 
             
         except Exception as error:
@@ -116,7 +124,7 @@ class Telebot:
             print(error)
 
         
-        context.bot.send_message(chat_id=update.effective_chat.id, text=plot)
+        context.bot.send_message(chat_id=update.effective_chat.id, text="SOME")
 
     def process_feedback(self, data, chat_id, message_id, context):
         '''

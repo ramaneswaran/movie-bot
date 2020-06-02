@@ -86,8 +86,8 @@ def get_movie_title(doc):
     
     try:
         ent = doc.ents[0]
-        title = ent.text 
+        movie_title = ent.text
+        return True, movie_title 
     except Exception as error:
         return False, None
-    finally:
-        return True, title
+    
