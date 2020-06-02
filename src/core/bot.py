@@ -170,8 +170,8 @@ class Telebot:
             # Contruct the message
             message = "<b>"+title+"</b> \n"
             message += "\n"
-            message += "<b>Year:</b> \t"+year+"\n"
-            message += "<b>Rated</b>: \t"+rated+"\n"
+            message += "<b>Year   :</b> \t"+year+"\n"
+            message += "<b>Rated  :</b> \t"+rated+"\n"
             message += "<b>Runtime:</b> \t"+runtime+"\n"
             
             # Contruct menu
