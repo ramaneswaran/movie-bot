@@ -96,7 +96,7 @@ def get_plot(title, key):
     
     except Exception as error:
         print(error)
-        return False, None
+        return False, None, None
     
     finally:
-        return True, data['Plot']
+        return True, data['imdbID'], data['Plot'], data['Actors'], data['Director']

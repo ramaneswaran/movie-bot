@@ -8,7 +8,7 @@ from src.core.bot import Telebot
 from src.core.reccomender import Engine
 
 # Import sklearn model
-from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
 
 # Import spacy

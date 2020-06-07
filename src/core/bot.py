@@ -8,7 +8,7 @@ from telegram import InlineKeyboardButton
 from telegram import InlineKeyboardMarkup
 
 # Import utility functions for API
-from src.utils.api_utils import get_metadata, get_movie_detail, get_rating
+from src.utils.api_utils import get_metadata
 from src.utils.api_utils import get_plot
 from src.utils.bot_utils import build_menu, create_user_state
 from src.utils.bot_utils import menu_one, menu_two, menu_three
@@ -87,11 +87,12 @@ class Telebot:
 
             print("Movie title is : "+movie_title)
 
-            valid, plot = get_plot(movie_title, self.api_token)
+            valid, imdb_id, plot, cast, directors = get_plot(movie_title, self.api_token)
             
+            plot += ' '+cast+' '+directors
             if not valid:
                 raise Exception("Movie not found in OMDB")
-            print("Movie plot is :"+plot)
+            
 
             # Get similar movies
             movie_ids = self.engine.similar_movies(plot)
@@ -118,7 +119,7 @@ class Telebot:
         '''
         
         if data == 'Yes':
-            context.send_message(chat_id=chat_id, text='Glad that I could help you')
+            context.bot.send_message(chat_id=chat_id, text='Glad that I could help you')
 
         elif data == 'No':
             self.show_movie(chat_id, context)
