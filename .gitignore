@@ -4,5 +4,7 @@ src/__pycache__/
 
 models/
 
+data/
+
 src/utils/__pycache__/
 src/utils/__pycache__/
