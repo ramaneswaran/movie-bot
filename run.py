@@ -1,6 +1,6 @@
 # Import utility packages
 import os
-import joblib
+import pickle
 from dotenv import load_dotenv
 
 # Import bot
@@ -14,6 +14,10 @@ from sklearn.metrics.pairwise import linear_kernel
 # Import spacy
 import spacy
 
+# Import ML libraries
+import pandas as pd
+import numpy as np
+
 if __name__ == "__main__":
     load_dotenv()
 
@@ -22,16 +26,18 @@ if __name__ == "__main__":
     api_token = os.getenv('API_TOKEN')
 
     # Load reccomender model and vectorizer
-    vectorizer = joblib.load('./models/vectorizer.pkl')
-    matrix = joblib.load('./models/mov_matrix.pkl')
-    rev_map = joblib.load('./models/rev_map.pkl')
+    vectorizer = pickle.load(open('./models/pkl_vec.pkl', 'rb'))
+    matrix = pickle.load(open('./models/database.pkl', 'rb'))
+    rev_map = pickle.load(open('./models/id2imdb.pkl', 'rb'))
+
+    metadata = pd.read_csv('./data/metadata.csv')
        
 
     # Instantiate reccomender engine class
-    engine = Engine(vectorizer, matrix, rev_map)
+    engine = Engine(vectorizer, matrix, rev_map, metadata)
 
     # Load spacy model
-    nlp = spacy.load('./models/mov_en_ner')
+    nlp = spacy.load('./models/ner')
 
     # Load telegram bot
     movie_bot = Telebot(bot_token, api_token, engine, nlp)
