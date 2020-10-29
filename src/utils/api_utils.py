@@ -11,7 +11,7 @@ def get_metadata(imdb_id, key):
     tuple: containing title, year, runtime and poster
     '''
     try:
-        url = 'http://www.omdbapi.com/?i=tt'+imdb_id+'&apikey='+key
+        url = 'http://www.omdbapi.com/?i='+imdb_id+'&apikey='+key
         response = requests.get(url)
         data = response.json()
         

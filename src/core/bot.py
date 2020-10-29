@@ -87,11 +87,15 @@ class Telebot:
 
             print("Movie title is : "+movie_title)
 
-            valid, imdb_id, plot, cast, directors = get_plot(movie_title, self.api_token)
+            # valid, imdb_id, plot, cast, directors = get_plot(movie_title, self.api_token)
             
-            plot += ' '+cast+' '+directors
-            if not valid:
-                raise Exception("Movie not found in OMDB")
+            # plot += ' '+cast+' '+directors
+            # if not valid:
+            #     raise Exception("Movie not found in OMDB")
+
+            movie_id = self.engine.search_movie(movie_title)
+
+            plot = self.engine.get_plot(movie_id)
             
 
             # Get similar movies
